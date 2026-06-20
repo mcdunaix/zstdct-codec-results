@@ -37,6 +37,7 @@ _VERIFIER_MODULES = (
     "verifiers.lzma_m0", "verifiers.lzma_m1", "verifiers.lzma_m2",
     "verifiers.lzma_m3", "verifiers.lzma_m4",
     "verifiers.png_m0",
+    "verifiers.png_m1",
 )
 
 

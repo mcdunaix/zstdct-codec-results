@@ -1,0 +1,6 @@
+{
+  "id": "png_m1",
+  "codec": "png",
+  "stage": "m1",
+  "description": "PNG M1: filter kill-switch (all 5 filter types: Sub, Up, Average, Paeth)"
+}
