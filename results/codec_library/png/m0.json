@@ -2,16 +2,33 @@
   "job_id": "png_m0",
   "codec": "png",
   "stage": "m0",
-  "timestamp": "2026-06-20T06:29:36.654430+00:00",
-  "status": "not_implemented",
-  "metrics": {},
-  "notes": "No verifier registered for png/m0. This stage does no work yet \u2014 reporting the truth, not a pass.",
-  "provenance": {
-    "produced_at": "2026-06-20T06:29:36.688009+00:00",
-    "device": "localhost",
-    "code_sha": "c856b840ff86b6d08049695b8c46d2789b3551f5",
-    "code_dirty": false,
-    "orchestration_version": "2.0-legitimacy"
+  "timestamp": "2026-06-20T06:30:28.742225+00:00",
+  "status": "pass",
+  "checks": {
+    "all_byte_exact": true,
+    "corpus_min": true
   },
-  "saved_at": "2026-06-20T00:29:36.688289"
+  "metrics": {
+    "files_decoded": 10,
+    "test_cases": 10,
+    "byte_exact": true,
+    "decoder_lines": 243
+  },
+  "tags": [
+    "image",
+    "png",
+    "lossless"
+  ],
+  "scope": "full",
+  "notes": "PNG decoder: from-scratch decode(encode(pixels)) roundtrip - 10/10 byte-exact. Corpus: sized 1x1 to 256x1, color types 0/2/6, bit_depth 8 everywhere.",
+  "provenance": {
+    "produced_at": "2026-06-20T06:30:28.867918+00:00",
+    "device": "localhost",
+    "code_sha": "ceec1d52bf5f799c76110dedbd6a1c21d1a09a31",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy",
+    "verifier": "verify_png_m0",
+    "source_hash": "44aa290df8427341"
+  },
+  "saved_at": "2026-06-20T06:31:00"
 }
