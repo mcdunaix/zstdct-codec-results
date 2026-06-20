@@ -248,6 +248,7 @@ def verify_png_m1(job) -> Evidence:
             "test_cases": n,
             "files_decoded": ok,
             "filter_variants": 5,
+            "kill_switch_pass": byte_exact,
         },
         scope="full",
         detail=detail,
