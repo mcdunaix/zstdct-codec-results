@@ -1,0 +1,50 @@
+{
+  "job_id": "lzma_m4",
+  "codec": "lzma",
+  "stage": "m4",
+  "timestamp": "2026-06-20T05:57:04.550162+00:00",
+  "status": "pass",
+  "checks": {
+    "payload_is_mode_b_bijection": true,
+    "gauge_is_symmetry_orbit": true,
+    "counting_absent": true,
+    "gauge_present_unpinned": true,
+    "op_mix_readable": true
+  },
+  "metrics": {
+    "synthesis_complete": true,
+    "mode_a_flavor": "orbit",
+    "orbit_count": 8,
+    "cell_count": 0,
+    "gauge_bits": 25.4,
+    "cost_residue_bits": 6.596,
+    "literal_frac": 0.5405,
+    "match_frac": 0.4595,
+    "model_bytes": 0
+  },
+  "tags": [
+    "lzma",
+    "range_coder",
+    "lz77",
+    "adaptive",
+    "mode_b",
+    "gauge_orbit",
+    "orbit_only",
+    "no_counting",
+    "no_transmitted_model",
+    "third_regime",
+    "synthesis_n3"
+  ],
+  "scope": "full",
+  "notes": "LZMA M4 synthesis: Mode-B payload bijection (spends exactly the law bits) + Mode-A-by-symmetry gauge realized as a fat ORBIT (width 0, no counting cell) + counting ABSENT (zero transmitted model) + gauge present-but-UNPINNED. Orbit-only \u2014 the third regime (bzip2=both, zstd=cell-only, LZMA=orbit-only); N=3 cross-family.",
+  "provenance": {
+    "produced_at": "2026-06-20T05:57:04.666247+00:00",
+    "device": "localhost",
+    "code_sha": "b4561608ee82c27d4c2864dc5a724bff8d14f7fa",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy",
+    "verifier": "verify_lzma_m4",
+    "source_hash": "ade1ca83a121f8a6"
+  },
+  "saved_at": "2026-06-19T23:57:04.667070"
+}
