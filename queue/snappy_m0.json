@@ -1,1 +1,0 @@
-{"id":"snappy_m0","codec":"snappy","stage":"m0","priority":1,"spec_url":"https://github.com/google/snappy/blob/master/format_description.txt","notes":"M0: Byte-exact RFC framing format decoder"}
