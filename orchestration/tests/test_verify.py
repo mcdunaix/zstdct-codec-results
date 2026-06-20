@@ -150,6 +150,19 @@ def test_base64_is_real_pass():
     check("gate accepts evidence-backed pass", ok, str(errs))
 
 
+def test_gzip_is_real_pass():
+    print("7. gzip m0 -> real FULL pass (known codec: reused spoon-feed decoder)")
+    r = run_stage({"id": "gzip_m0", "codec": "gzip", "stage": "m0"})
+    check("status is pass", r["status"] == "pass", r["status"])
+    m = r.get("metrics", {})
+    check("byte_exact true", m.get("byte_exact") is True, str(m))
+    check("files_decoded == test_cases", m.get("files_decoded") == m.get("test_cases"),
+          f"{m.get('files_decoded')}/{m.get('test_cases')}")
+    check("deflate/lz77 tags present", set(["deflate", "lz77"]).issubset(set(r.get("tags", []))))
+    ok, errs = validate_result(r)
+    check("gate accepts evidence-backed pass", ok, str(errs))
+
+
 def main():
     print("=" * 64)
     print("Legitimacy backbone tests")
@@ -160,6 +173,7 @@ def main():
     test_snappy_is_partial_with_real_metrics()
     test_failing_and_erroring_are_not_pass()
     test_base64_is_real_pass()
+    test_gzip_is_real_pass()
     print("=" * 64)
     if _failures:
         print(f"FAILED: {len(_failures)} check(s): {_failures}")
