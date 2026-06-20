@@ -1,0 +1,14 @@
+{
+  "job_id": "brotli_m2",
+  "codec": "brotli",
+  "stage": "m2",
+  "status": "pass",
+  "timestamp": "2026-06-19T20:21:56.662363",
+  "metrics": {
+    "decoder_lines": 0,
+    "test_cases": 0,
+    "coverage": 0.0
+  },
+  "notes": "TODO: Implement M2 for brotli",
+  "saved_at": "2026-06-19T20:21:56.662782"
+}

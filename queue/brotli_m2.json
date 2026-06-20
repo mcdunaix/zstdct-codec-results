@@ -1,8 +1,0 @@
-{
-  "id": "brotli_m2",
-  "codec": "brotli",
-  "stage": "m2",
-  "priority": 1,
-  "spec_url": "",
-  "notes": "Spoon-feed stage m2 for brotli"
-}
