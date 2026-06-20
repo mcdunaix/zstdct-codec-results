@@ -1,0 +1,36 @@
+{
+  "job_id": "gzip_m2",
+  "codec": "gzip",
+  "stage": "m2",
+  "timestamp": "2026-06-20T04:11:36.126429+00:00",
+  "status": "pass",
+  "checks": {
+    "gzip_byte_exact": true,
+    "raw_deflate_byte_exact": true,
+    "corpus_min": true
+  },
+  "metrics": {
+    "byte_exact": true,
+    "reencode_samples": 9,
+    "gzip_reencoded": 9,
+    "raw_reencoded": 9
+  },
+  "tags": [
+    "deflate",
+    "reencode",
+    "direction1",
+    "byte_exact"
+  ],
+  "scope": "full",
+  "notes": "gzip M2 (Direction 1): re-encoder reproduces stdlib gzip AND raw-DEFLATE byte-for-byte on 9/9 gzip and 9/9 raw streams.",
+  "provenance": {
+    "produced_at": "2026-06-20T04:11:36.243541+00:00",
+    "device": "localhost",
+    "code_sha": "b32a49341a0e968abf0c262099daf1fc54515fad",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy",
+    "verifier": "verify_gzip_m2",
+    "source_hash": "b219bf8213134e08"
+  },
+  "saved_at": "2026-06-19T22:11:36.244396"
+}
