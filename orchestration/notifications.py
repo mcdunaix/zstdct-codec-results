@@ -60,13 +60,17 @@ def notify_job_complete(job_id, codec, stage, status, metrics=None):
     msg = f"{emoji} <b>{codec.upper()}</b> {stage.upper()} <code>({status})</code>"
 
     if metrics:
+        print(f"DEBUG: metrics = {metrics}", flush=True)
         if "decoder_lines" in metrics:
             msg += f"\n📝 {metrics['decoder_lines']} lines"
         if "test_cases" in metrics:
             msg += f" | {metrics['test_cases']} tests"
         if "coverage" in metrics:
             msg += f" | {metrics['coverage']:.0%} coverage"
+    else:
+        print(f"DEBUG: no metrics provided for {job_id}", flush=True)
 
+    print(f"DEBUG: sending message: {msg}", flush=True)
     send_message(msg)
 
 

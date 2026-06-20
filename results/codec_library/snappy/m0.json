@@ -1,9 +1,9 @@
 {
-  "job_id": "snappy_m0",
+  "job_id": "snappy_test",
   "codec": "snappy",
   "stage": "m0",
   "status": "pass",
-  "timestamp": "2026-06-19T20:24:36.896193",
+  "timestamp": "2026-06-19T20:27:51.263882",
   "metrics": {
     "decoder_lines": 120,
     "test_cases": 0,
@@ -15,5 +15,5 @@
   ],
   "comparison": "Simple framing, no entropy coding like Huffman",
   "notes": "Snappy M0: byte-exact framing format decoder (test implementation)",
-  "saved_at": "2026-06-19T20:24:36.896609"
+  "saved_at": "2026-06-19T20:27:51.264249"
 }
