@@ -1,0 +1,39 @@
+{
+  "job_id": "lzma_m1",
+  "codec": "lzma",
+  "stage": "m1",
+  "timestamp": "2026-06-20T05:56:54.320897+00:00",
+  "status": "pass",
+  "checks": {
+    "range_coder_total_mode_b": true,
+    "spends_law_bits": true,
+    "lz_layer_thins_not_entropy": true,
+    "gauge_is_output_preserving_channel": true
+  },
+  "metrics": {
+    "kill_switch_pass": true,
+    "gauge_bits": 20,
+    "cost_residue_bits": 2.125,
+    "lz_ok": 26,
+    "lz_fail": 274
+  },
+  "tags": [
+    "kill_switch",
+    "mode_b",
+    "range_coder_total",
+    "gauge_covert_channel",
+    "no_counting"
+  ],
+  "scope": "full",
+  "notes": "LZMA M1 kill-switch: range coder TOTAL (Mode B) + spends exactly law bits + LZ layer thins (not the entropy coder) + final-interval slack is an output-preserving gauge (covert channel). Counting ABSENT \u2014 no transmitted model.",
+  "provenance": {
+    "produced_at": "2026-06-20T05:56:54.512479+00:00",
+    "device": "localhost",
+    "code_sha": "936acdc82189b58ee69a9e85c7ed311f7712f729",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy",
+    "verifier": "verify_lzma_m1",
+    "source_hash": "3d456abc52777793"
+  },
+  "saved_at": "2026-06-19T23:56:54.513370"
+}
