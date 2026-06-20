@@ -1,0 +1,43 @@
+{
+  "job_id": "gzip_m4",
+  "codec": "gzip",
+  "stage": "m4",
+  "timestamp": "2026-06-20T04:11:43.418163+00:00",
+  "status": "pass",
+  "checks": {
+    "recursive_kraft_inside_kraft": true,
+    "conventional_is_degenerate_cell": true,
+    "shipped_counting_model": true,
+    "gauge_present": true,
+    "op_mix_readable": true
+  },
+  "metrics": {
+    "synthesis_complete": true,
+    "n_dynamic_blocks": 1,
+    "literal_frac": 0.4205,
+    "match_frac": 0.5795,
+    "n_fixed_degenerate": 40
+  },
+  "tags": [
+    "deflate",
+    "static_model",
+    "counting_cell",
+    "recursive_kraft",
+    "conventional_model",
+    "gauge_pinned",
+    "cell_only",
+    "synthesis_n4"
+  ],
+  "scope": "full",
+  "notes": "gzip M4 synthesis: counting cell + recursive Kraft-inside-Kraft (new) + conventional model = degenerate cell (new) + shipped model present + gauge present-but-pinned. Cell-only; N=4 in the static-model family.",
+  "provenance": {
+    "produced_at": "2026-06-20T04:11:43.476718+00:00",
+    "device": "localhost",
+    "code_sha": "843a48a1dedfd95457feac2fbbac00e24d925b6c",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy",
+    "verifier": "verify_gzip_m4",
+    "source_hash": "bec37f86e693550c"
+  },
+  "saved_at": "2026-06-19T22:11:43.477111"
+}
