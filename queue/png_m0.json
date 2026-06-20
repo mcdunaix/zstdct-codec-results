@@ -1,8 +1,0 @@
-{
-  "id": "png_m0",
-  "codec": "png",
-  "stage": "m0",
-  "spec_url": "https://www.w3.org/TR/PNG/",
-  "description": "PNG M0: from-scratch decoder (signature, chunks, DEFLATE via zlib, filter reversal)",
-  "queued_at": "2026-06-20T00:30:00Z"
-}

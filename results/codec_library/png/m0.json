@@ -1,0 +1,17 @@
+{
+  "job_id": "png_m0",
+  "codec": "png",
+  "stage": "m0",
+  "timestamp": "2026-06-20T06:29:36.654430+00:00",
+  "status": "not_implemented",
+  "metrics": {},
+  "notes": "No verifier registered for png/m0. This stage does no work yet \u2014 reporting the truth, not a pass.",
+  "provenance": {
+    "produced_at": "2026-06-20T06:29:36.688009+00:00",
+    "device": "localhost",
+    "code_sha": "c856b840ff86b6d08049695b8c46d2789b3551f5",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy"
+  },
+  "saved_at": "2026-06-20T00:29:36.688289"
+}
