@@ -16,7 +16,7 @@ from pathlib import Path
 from verify import Evidence, register
 
 ORCH_DIR = Path(__file__).resolve().parent.parent
-DECODER_SRC = ORCH_DIR / "gzip_decoder.py"
+DECODER_SRC = ORCH_DIR / "zstdct" / "gzip_decoder.py"
 
 
 def _corpus():
@@ -43,7 +43,7 @@ def _decoder_lines():
 
 @register("gzip", "m0")
 def verify_gzip_m0(job) -> Evidence:
-    from gzip_decoder import decode_gzip
+    from zstdct.gzip_decoder import decode_gzip
 
     corpus = _corpus()
     ok = 0

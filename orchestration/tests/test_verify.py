@@ -163,6 +163,15 @@ def test_gzip_is_real_pass():
     check("gate accepts evidence-backed pass", ok, str(errs))
 
 
+def test_gzip_full_chain():
+    print("8. gzip FULL chain m0-m4 -> all real passes (reused spoon-feed analysis)")
+    for s in ["m0", "m1", "m2", "m3", "m4"]:
+        r = run_stage({"id": f"gzip_{s}", "codec": "gzip", "stage": s})
+        ok, errs = validate_result(r)
+        check(f"gzip/{s} pass + gate", r["status"] == "pass" and ok,
+              f"{r['status']} {errs}")
+
+
 def main():
     print("=" * 64)
     print("Legitimacy backbone tests")
@@ -174,6 +183,7 @@ def main():
     test_failing_and_erroring_are_not_pass()
     test_base64_is_real_pass()
     test_gzip_is_real_pass()
+    test_gzip_full_chain()
     print("=" * 64)
     if _failures:
         print(f"FAILED: {len(_failures)} check(s): {_failures}")
