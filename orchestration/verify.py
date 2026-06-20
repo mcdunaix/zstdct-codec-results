@@ -30,7 +30,7 @@ VALID_STATUS = ("pass", "fail", "partial", "not_implemented", "error")
 M0_MIN_FILES = 8
 
 # Verifier modules to import so they self-register via @register.
-_VERIFIER_MODULES = ("verifiers.snappy_m0",)
+_VERIFIER_MODULES = ("verifiers.snappy_m0", "verifiers.base64_m0")
 
 
 class Evidence:

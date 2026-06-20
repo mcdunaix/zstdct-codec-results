@@ -137,6 +137,19 @@ def test_failing_and_erroring_are_not_pass():
     check("error captured", "decoder blew up" in re_.get("error", ""))
 
 
+def test_base64_is_real_pass():
+    print("6. base64 m0 -> real FULL pass (trivial real codec, RFC 4648)")
+    r = run_stage({"id": "base64_m0", "codec": "base64", "stage": "m0"})
+    check("status is pass", r["status"] == "pass", r["status"])
+    m = r.get("metrics", {})
+    check("byte_exact true", m.get("byte_exact") is True, str(m))
+    check("files_decoded == test_cases", m.get("files_decoded") == m.get("test_cases"),
+          f"{m.get('files_decoded')}/{m.get('test_cases')}")
+    check("decoder_lines measured (>0)", int(m.get("decoder_lines", 0)) > 0)
+    ok, errs = validate_result(r)
+    check("gate accepts evidence-backed pass", ok, str(errs))
+
+
 def main():
     print("=" * 64)
     print("Legitimacy backbone tests")
@@ -146,6 +159,7 @@ def main():
     test_real_roundtrip_passes()
     test_snappy_is_partial_with_real_metrics()
     test_failing_and_erroring_are_not_pass()
+    test_base64_is_real_pass()
     print("=" * 64)
     if _failures:
         print(f"FAILED: {len(_failures)} check(s): {_failures}")
