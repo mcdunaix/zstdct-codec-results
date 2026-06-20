@@ -1,0 +1,38 @@
+{
+  "job_id": "base32_m0",
+  "codec": "base32",
+  "stage": "m0",
+  "timestamp": "2026-06-20T22:31:35.069797+00:00",
+  "status": "pass",
+  "checks": {
+    "all_byte_exact": true,
+    "corpus_min": true,
+    "independent_decoder": true
+  },
+  "metrics": {
+    "byte_exact": true,
+    "files_decoded": 10,
+    "test_cases": 10,
+    "decoder_lines": 67
+  },
+  "tags": [
+    "generated",
+    "decoder",
+    "byte_exact",
+    "base32",
+    "encoding",
+    "rfc4648"
+  ],
+  "scope": "full",
+  "notes": "base32 M0: machine-written independent decoder vs real base32 \u2014 10/10 byte-exact (reference codec poisoned at runtime).",
+  "provenance": {
+    "produced_at": "2026-06-20T22:31:35.149543+00:00",
+    "device": "localhost",
+    "code_sha": "595d0348b4f87c4af0fa4b17f683296cbff963fa",
+    "code_dirty": true,
+    "orchestration_version": "2.0-legitimacy",
+    "verifier": "make_m0_verifier.<locals>.verify",
+    "source_hash": "182ec13a4731b409"
+  },
+  "saved_at": "2026-06-20T16:31:35.150152"
+}

@@ -36,6 +36,8 @@ _VERIFIER_MODULES = (
     "verifiers.gzip_m3", "verifiers.gzip_m4",
     "verifiers.lzma_m0", "verifiers.lzma_m1", "verifiers.lzma_m2",
     "verifiers.lzma_m3", "verifiers.lzma_m4",
+    # png verifiers exist on the device (generated there earlier); keep them
+    # registered. Missing on the dev Mac -> _load_verifiers warns + skips (harmless).
     "verifiers.png_m0",
     "verifiers.png_m1",
 )
@@ -95,6 +97,19 @@ def _load_verifiers():
             importlib.import_module(mod)
         except Exception as e:  # pragma: no cover - defensive
             print(f"verify: could not load {mod}: {e}", flush=True)
+
+
+def ensure_verifiers_loaded():
+    """Public hook: load the built-in verifiers so callers can check VERIFIERS
+    (e.g. the loop deciding whether a stage needs in-loop generation) before
+    run_stage is invoked. Idempotent."""
+    _load_verifiers()
+
+
+def has_verifier(codec, stage) -> bool:
+    """True if a verifier is registered (built-in or already generated)."""
+    ensure_verifiers_loaded()
+    return (codec, stage) in VERIFIERS
 
 
 def run_stage(job) -> dict:

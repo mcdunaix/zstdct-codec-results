@@ -29,16 +29,45 @@ from notifications import (
     notify_job_start, notify_job_complete, notify_codec_complete,
     notify_error,
 )
-from verify import run_stage
+from verify import run_stage, has_verifier
+from decomposer import decompose, agent_available, agent_name, GENERATABLE
+from generated import register_generated
+import oracle
 
 # Assume spoon_feed module is available (in src/zstdct/)
 sys.path.insert(0, str(REPO_ROOT.parent / "src"))
 
 
+def maybe_generate(job):
+    """Decomposer-inside-the-loop: if no verifier exists for a hard-gated
+    (codec, stage), have Codewhale GENERATE the decoder, validate it byte-exact
+    against the trusted oracle, and register the trusted verifier. Returns a
+    short note for the log. Never raises and NEVER fabricates a pass — if
+    generation fails or the stage has no hard oracle, the stage falls through to
+    run_stage's honest not_implemented/partial."""
+    codec, stage = job["codec"], job["stage"]
+    if has_verifier(codec, stage):
+        return "verifier already present (skip generation)"
+    if stage not in GENERATABLE or not oracle.has_oracle(codec):
+        return f"{stage}: no hard byte-exact oracle — will report honestly"
+    if not agent_available():
+        return "no generation agent (hermes/codewhale) on PATH — will report not_implemented"
+
+    print(f"  No verifier for {codec}/{stage}; generating in-loop via {agent_name()}...", flush=True)
+    outcome = decompose(job, log=lambda m: print(m, flush=True))
+    if outcome.get("generated"):
+        register_generated(codec, stage)
+        v = outcome.get("validation", {})
+        passed = v.get("files_decoded", v.get("reencode_samples"))
+        return (f"GENERATED + byte-exact ({passed}/{v.get('test_cases')}) "
+                f"in {outcome.get('attempts')} attempt(s)")
+    return f"generation failed: {outcome.get('reason')} — {str(outcome.get('detail',''))[:120]}"
+
+
 def work_on_job(job):
-    """Run the registered verifier for this job. Status is DERIVED from measured
-    evidence inside verify.run_stage — never hardcoded here. run_stage never
-    raises; worst case is an honest 'error' status."""
+    """Run the verifier for this job, generating it in-loop first if missing.
+    Status is DERIVED from measured evidence inside verify.run_stage — never
+    hardcoded here. run_stage never raises; worst case is an honest 'error'."""
     job_id = job["id"]
     codec = job["codec"]
     stage = job["stage"]
@@ -49,15 +78,34 @@ def work_on_job(job):
     print(f"Spec: {job.get('spec_url', '')}", flush=True)
     print(f"{'='*60}", flush=True)
 
-    result = run_stage(job)
+    note = maybe_generate(job)          # may invoke Codewhale; never fabricates
+    print(f"  decompose: {note}", flush=True)
+
+    result = run_stage(job)             # authoritative, gated, provenance-stamped
     print(f"  -> status={result['status']}  metrics={result.get('metrics', {})}", flush=True)
     return result
+
+
+def preflight():
+    """Report readiness for in-loop generation. The orchestration holds NO API
+    key — Codewhale owns its DeepSeek credentials; we only need its CLI present.
+    Missing CLI is non-fatal: stages needing generation report not_implemented."""
+    ok = agent_available()
+    print(f"Preflight: generation agent {agent_name().upper() if ok else 'MISSING'} "
+          f"(generation {'enabled' if ok else 'DISABLED — stages will report not_implemented'})",
+          flush=True)
+    if not ok:
+        print("  -> install/login hermes (or codewhale); generation needs one on PATH.", flush=True)
+    print(f"  oracle codecs: {', '.join(sorted(oracle.REFERENCE))}  | "
+          f"auto-gen stages: {', '.join(GENERATABLE)}", flush=True)
+    return ok
 
 
 def main():
     """Main loop."""
     print("Codewhale autonomous started", flush=True)
     print(f"Repo: {REPO_ROOT}", flush=True)
+    preflight()
 
     idle_cycles = 0
     max_idle = 12          # ~12 min of empty queue before a quiet status line
