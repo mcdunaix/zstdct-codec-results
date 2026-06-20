@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Codec Result Schema",
+  "description": "Result from spoon-feed M0-M4 analysis of a codec. The authoritative gate is verify.validate_result() (runs on-device AND in CI); this schema enforces shape/enums and that a pass carries evidence + provenance. Per-stage thresholds live in the Python gate to avoid duplicating fragile logic.",
+  "type": "object",
+  "required": ["job_id", "codec", "stage", "status"],
+  "properties": {
+    "job_id": {"type": "string", "description": "Job identifier (e.g., 'brotli_m0')"},
+    "codec": {"type": "string", "description": "Codec name"},
+    "stage": {
+      "type": "string",
+      "enum": ["m0", "m1", "m2", "m3", "m4"],
+      "description": "Spoon-feed stage"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pass", "fail", "partial", "not_implemented", "error"],
+      "description": "pass=evidence-backed; partial=real but incomplete scope; fail=verifier ran and failed; not_implemented=no verifier yet; error=verifier raised. Only 'pass' is green."
+    },
+    "timestamp": {"type": "string", "description": "ISO 8601 (UTC) timestamp"},
+    "saved_at": {"type": "string", "description": "ISO timestamp added on persistence"},
+    "scope": {
+      "type": "string",
+      "enum": ["full", "partial"],
+      "description": "Does the verifier cover the whole stage? A 'pass' requires full scope."
+    },
+    "checks": {
+      "type": "object",
+      "description": "Named boolean checks that drove the status (all true + full scope => pass)",
+      "additionalProperties": {"type": "boolean"}
+    },
+    "metrics": {
+      "type": "object",
+      "description": "MEASURED numbers from the verifier (never literals)",
+      "properties": {
+        "decoder_lines": {"type": "integer", "description": "Measured lines of decoder source (M0)"},
+        "test_cases": {"type": "integer", "description": "Number of corpus cases exercised (M0)"},
+        "files_decoded": {"type": "integer", "description": "Cases decoded byte-exact (M0)"},
+        "coverage": {"type": "number", "minimum": 0, "maximum": 1, "description": "Measured code coverage, if available"},
+        "byte_exact": {"type": "boolean", "description": "All corpus cases reconstructed byte-for-byte"},
+        "kill_switch_pass": {"type": "boolean", "description": "M1 kill-switch held"},
+        "preimage_mirrors_mode": {"type": "boolean", "description": "Does preimage mirror the algorithm? (M1)"},
+        "reencode_samples": {"type": "integer", "description": "Number of samples reencoded (M2)"},
+        "cell_count": {"type": "integer", "description": "Coarsening cells found (M3)"},
+        "orbit_count": {"type": "integer", "description": "Symmetry orbits found (M3)"},
+        "mode_a_flavor": {"type": "string", "enum": ["counting", "orbit", "both", "none"], "description": "Mode A structure type (M3)"},
+        "synthesis_complete": {"type": "boolean", "description": "M4 synthesis integrated"}
+      },
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Chain of custody: which code + device produced this result",
+      "properties": {
+        "produced_at": {"type": "string"},
+        "device": {"type": "string"},
+        "code_sha": {"type": ["string", "null"]},
+        "code_dirty": {"type": ["boolean", "null"]},
+        "orchestration_version": {"type": "string"},
+        "verifier": {"type": "string"},
+        "source_hash": {"type": ["string", "null"]}
+      },
+      "additionalProperties": true
+    },
+    "tags": {"type": "array", "items": {"type": "string"}, "description": "Structural tags (M4 synthesis)"},
+    "comparison": {"type": "string", "description": "Brief comparison to known codecs"},
+    "notes": {"type": "string", "description": "Narrative notes from the analysis"},
+    "error": {"type": "string", "description": "Error message if status=fail/error"},
+    "trace": {"type": "string", "description": "Truncated traceback if status=error"}
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"status": {"const": "pass"}},
+        "required": ["status"]
+      },
+      "then": {
+        "required": ["metrics", "provenance"],
+        "properties": {
+          "scope": {"const": "full"},
+          "provenance": {
+            "anyOf": [
+              {"required": ["code_sha"], "properties": {"code_sha": {"type": "string"}}},
+              {"required": ["source_hash"], "properties": {"source_hash": {"type": "string"}}}
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

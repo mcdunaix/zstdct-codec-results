@@ -45,7 +45,8 @@ class SnappyDecoder:
                 break
 
             block_type = compressed_data[offset]
-            block_len = struct.unpack("<I", b"\x00" + compressed_data[offset + 1 : offset + 4])[0]
+            # 3-byte little-endian length: append the zero byte as the MSB.
+            block_len = struct.unpack("<I", compressed_data[offset + 1 : offset + 4] + b"\x00")[0]
             offset += 4
 
             if offset + block_len > len(compressed_data):

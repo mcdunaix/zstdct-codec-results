@@ -1,0 +1,23 @@
+# Job Queue Configuration
+# Define codecs and their decomposition stages
+
+codecs:
+  - name: brotli
+    stages: [m0, m1, m2, m3, m4]
+    priority: 1
+    spec_url: "https://tools.ietf.org/html/rfc7932"
+
+  - name: lz4
+    stages: [m0, m1, m2, m3, m4]
+    priority: 2
+    spec_url: "https://github.com/lz4/lz4/blob/dev/doc/lz4_Frame_format.md"
+
+  - name: snappy
+    stages: [m0, m1, m2, m3, m4]
+    priority: 3
+    spec_url: "https://github.com/google/snappy/blob/master/format_description.txt"
+
+  - name: zopfli
+    stages: [m0, m1, m2, m3, m4]
+    priority: 4
+    spec_url: "https://en.wikipedia.org/wiki/Deflate"

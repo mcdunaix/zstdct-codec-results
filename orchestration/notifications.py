@@ -12,8 +12,12 @@ Or create a .env file in orchestration/:
 """
 
 import os
-import requests
 from pathlib import Path
+
+try:
+    import requests
+except ImportError:  # degrade gracefully where requests isn't installed
+    requests = None
 
 # Load from .env if it exists
 ENV_FILE = Path(__file__).parent / ".env"
@@ -29,6 +33,9 @@ CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 
 def send_message(text):
     """Send a message via hermesticles_bot."""
+    if requests is None:
+        print("Warning: 'requests' not installed; skipping Telegram notification", flush=True)
+        return False
     if not BOT_TOKEN or not CHAT_ID:
         print(f"Warning: Telegram not configured (token={bool(BOT_TOKEN)}, chat_id={bool(CHAT_ID)})", flush=True)
         return False
@@ -54,9 +61,19 @@ def notify_job_start(job_id, codec, stage):
     send_message(msg)
 
 
+STATUS_EMOJI = {
+    "pass": "✅",
+    "partial": "🟡",
+    "fail": "❌",
+    "not_implemented": "⚪",
+    "error": "🔴",
+}
+
+
 def notify_job_complete(job_id, codec, stage, status, metrics=None):
-    """Notify when a job completes."""
-    emoji = "✅" if status == "pass" else "❌"
+    """Notify when a job completes. Only a real pass shows green; everything
+    else gets a distinct marker so the feed never overstates progress."""
+    emoji = STATUS_EMOJI.get(status, "❔")
     msg = f"{emoji} <b>{codec.upper()}</b> {stage.upper()} <code>({status})</code>"
 
     if metrics:
@@ -70,9 +87,9 @@ def notify_job_complete(job_id, codec, stage, status, metrics=None):
     send_message(msg)
 
 
-def notify_codec_complete(codec, stages_passed):
-    """Notify when entire codec is complete."""
-    msg = f"🎉 <b>{codec.upper()}</b> COMPLETE\n✓ All {len(stages_passed)} stages passed"
+def notify_codec_complete(codec, passed, total):
+    """Notify when an entire codec is a real pass (all stages status==pass)."""
+    msg = f"🎉 <b>{codec.upper()}</b> COMPLETE\n✓ {passed}/{total} stages passed"
     send_message(msg)
 
 

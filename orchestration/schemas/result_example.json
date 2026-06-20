@@ -1,0 +1,29 @@
+{
+  "comment": "Example of a LEGITIMATE M0 pass. The status is backed by MEASURED evidence (64/64 corpus files decoded byte-exact) plus provenance. A worker cannot emit this without a verifier actually decoding the corpus; the gate rejects a pass lacking metrics or provenance.",
+  "job_id": "examplecodec_m0",
+  "codec": "examplecodec",
+  "stage": "m0",
+  "status": "pass",
+  "scope": "full",
+  "timestamp": "2026-06-19T15:30:45+00:00",
+  "checks": {"all_byte_exact": true, "corpus_min": true},
+  "metrics": {
+    "decoder_lines": 312,
+    "test_cases": 64,
+    "files_decoded": 64,
+    "byte_exact": true,
+    "coverage": 0.94
+  },
+  "tags": ["static_model", "huffman", "lz77_variant"],
+  "comparison": "DEFLATE variant with higher-order context modeling",
+  "notes": "Byte-exact decoder; 64/64 real-world files reconstructed byte-for-byte.",
+  "provenance": {
+    "produced_at": "2026-06-19T15:30:45+00:00",
+    "device": "galaxy-tab-s7",
+    "code_sha": "0123456789abcdef0123456789abcdef01234567",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy",
+    "verifier": "verify_examplecodec_m0",
+    "source_hash": "a1b2c3d4e5f60718"
+  }
+}

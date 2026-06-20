@@ -19,100 +19,39 @@ Or run in background (on Android):
 
 import time
 import sys
-import json
-from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
 from git_queue import (
-    pull_latest, list_pending_jobs, claim_job, submit_job_result,
-    get_codec_progress, get_next_stage, REPO_ROOT
+    pull_latest, list_pending_jobs, submit_job_result,
+    get_codec_pass_progress, is_codec_complete, REPO_ROOT
 )
 from notifications import (
     notify_job_start, notify_job_complete, notify_codec_complete,
-    notify_error, notify_status
+    notify_error,
 )
+from verify import run_stage
 
 # Assume spoon_feed module is available (in src/zstdct/)
 sys.path.insert(0, str(REPO_ROOT.parent / "src"))
 
 
 def work_on_job(job):
-    """
-    Execute M0-M4 for the given job.
-    Returns result dict or None on failure.
-    """
+    """Run the registered verifier for this job. Status is DERIVED from measured
+    evidence inside verify.run_stage — never hardcoded here. run_stage never
+    raises; worst case is an honest 'error' status."""
     job_id = job["id"]
     codec = job["codec"]
     stage = job["stage"]
-    spec_url = job.get("spec_url", "")
 
     notify_job_start(job_id, codec, stage)
     print(f"\n{'='*60}", flush=True)
-    print(f"Working on: {job_id}", flush=True)
-    print(f"Codec: {codec}, Stage: {stage}", flush=True)
-    print(f"Spec: {spec_url}", flush=True)
-    print(f"{'='*60}\n", flush=True)
+    print(f"Working on: {job_id}  (codec={codec}, stage={stage})", flush=True)
+    print(f"Spec: {job.get('spec_url', '')}", flush=True)
+    print(f"{'='*60}", flush=True)
 
-    # Test codec: Snappy M0
-    if codec == "snappy" and stage == "m0":
-        try:
-            from codec_m0_snappy import SnappyDecoder
-            print("✓ Snappy decoder imported", flush=True)
-            decoder = SnappyDecoder()
-            summary = decoder.summary()
-            print(f"✓ Decoder instantiated", flush=True)
-
-            result = {
-                "job_id": job_id,
-                "codec": codec,
-                "stage": stage,
-                "status": "pass",
-                "timestamp": datetime.now().isoformat(),
-                "metrics": {
-                    "decoder_lines": 120,
-                    "test_cases": 0,  # Would test real files in full implementation
-                    "coverage": 0.85
-                },
-                "tags": ["fast_compression", "framing_format"],
-                "comparison": "Simple framing, no entropy coding like Huffman",
-                "notes": "Snappy M0: byte-exact framing format decoder (test implementation)"
-            }
-            print(f"✓ Result generated", flush=True)
-            return result
-        except Exception as e:
-            print(f"✗ Snappy M0 failed: {e}", flush=True)
-            return {
-                "job_id": job_id,
-                "codec": codec,
-                "stage": stage,
-                "status": "fail",
-                "timestamp": datetime.now().isoformat(),
-                "error": str(e),
-                "notes": f"Failed to run Snappy M0: {e}"
-            }
-
-    # Placeholder for other codecs
-    result = {
-        "job_id": job_id,
-        "codec": codec,
-        "stage": stage,
-        "status": "pass",
-        "timestamp": datetime.now().isoformat(),
-        "metrics": {
-            "decoder_lines": 0,
-            "test_cases": 0,
-            "coverage": 0.0
-        },
-        "notes": f"TODO: Implement {stage.upper()} for {codec}"
-    }
-
+    result = run_stage(job)
+    print(f"  -> status={result['status']}  metrics={result.get('metrics', {})}", flush=True)
     return result
-
-
-def check_codec_complete(codec):
-    """Check if all stages of a codec are done."""
-    completed, total = get_codec_progress(codec)
-    return completed == total
 
 
 def main():
@@ -121,67 +60,60 @@ def main():
     print(f"Repo: {REPO_ROOT}", flush=True)
 
     idle_cycles = 0
-    max_idle = 12  # After 12 cycles (12 * 60s = 12 min) with no jobs, report status
+    max_idle = 12          # ~12 min of empty queue before a quiet status line
+    push_fail_streak = 0   # backoff when GitHub is unreachable
 
     while True:
         try:
-            # Pull latest
-            print(f"\n[{datetime.now().isoformat()}] Pulling...", flush=True)
+            print(f"\n[{datetime.now(timezone.utc).isoformat()}] Pulling...", flush=True)
             pull_latest()
 
-            # Get pending jobs
             pending = list_pending_jobs()
             print(f"Pending jobs: {len(pending)}", flush=True)
 
             if not pending:
                 idle_cycles += 1
                 if idle_cycles >= max_idle:
-                    # Report status every 12 min
-                    print(f"No jobs. Sleeping 60s...", flush=True)
+                    print("No jobs. Idle.", flush=True)
                     idle_cycles = 0
                 time.sleep(60)
                 continue
 
             idle_cycles = 0
-
-            # Get first job
             job = pending[0]
-            job_id = job["id"]
-            codec = job["codec"]
-            stage = job["stage"]
+            job_id, codec, stage = job["id"], job["codec"], job["stage"]
 
-            # Work on it
-            try:
-                result = work_on_job(job)
-                if result is None:
-                    raise Exception("work_on_job returned None")
+            result = work_on_job(job)  # never raises; status is evidence-derived
+            print(f"Submitting {job_id}...", flush=True)
+            outcome = submit_job_result(job_id, codec, stage, result)
 
-                # Submit result
-                print(f"Submitting {job_id}...", flush=True)
-                success = submit_job_result(job_id, codec, stage, result)
+            if outcome["ok"]:
+                notify_job_complete(job_id, codec, stage,
+                                    result.get("status"), result.get("metrics"))
+                if is_codec_complete(codec):
+                    passed, total = get_codec_pass_progress(codec)
+                    notify_codec_complete(codec, passed, total)
+                    print(f"🎉 {codec.upper()} COMPLETE ({passed}/{total} pass)", flush=True)
 
-                if success:
-                    # Notify completion
-                    notify_job_complete(job_id, codec, stage, result.get("status"), result.get("metrics"))
-
-                    # Check if whole codec is done
-                    if check_codec_complete(codec):
-                        completed, total = get_codec_progress(codec)
-                        notify_codec_complete(codec, list(range(completed)))
-                        print(f"✅ {codec.upper()} COMPLETE", flush=True)
+                if outcome.get("pushed"):
+                    push_fail_streak = 0
                 else:
-                    # Push failed
-                    notify_error(job_id, "Failed to push results to GitHub")
-                    print(f"❌ Push failed for {job_id}", flush=True)
+                    # Saved + committed locally but not pushed (GitHub unreachable).
+                    # The job is already dequeued, so there's no re-loop — just back
+                    # off; a later cycle pushes the backlog.
+                    push_fail_streak = min(push_fail_streak + 1, 6)
+                    backoff = 30 * push_fail_streak
+                    if push_fail_streak == 1:
+                        notify_error(job_id, "Saved locally; push to GitHub failed (will retry)")
+                    print(f"⚠️ Push failed; backing off {backoff}s "
+                          f"(streak={push_fail_streak})", flush=True)
+                    time.sleep(backoff)
 
-            except Exception as e:
-                error_msg = str(e)
-                print(f"❌ Job failed: {error_msg}", flush=True)
-                notify_error(job_id, error_msg)
-
-                # Even on error, try to move past this job
-                # (optional: keep trying, or skip to next)
-                time.sleep(5)
+            elif outcome.get("rejected"):
+                # run_stage always emits gate-valid results, so this means a verifier
+                # bug. It's already quarantined to failed/; surface it loudly.
+                notify_error(job_id, f"GATE REJECTED: {'; '.join(outcome['errors'][:2])}")
+                print(f"⛔ {job_id} rejected by gate: {outcome['errors']}", flush=True)
 
         except KeyboardInterrupt:
             print("\nShutdown requested", flush=True)

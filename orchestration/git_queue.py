@@ -12,11 +12,14 @@ Device pulls repo, works on jobs, commits results back.
 import subprocess
 import json
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
-REPO_ROOT = Path(__file__).parent.parent  # Assume repo is /path/to/zstdct-codec-results
+from verify import validate_result
+
+REPO_ROOT = Path(__file__).parent.parent  # results-repo root on the device
 QUEUE_DIR = REPO_ROOT / "queue"
 RESULTS_DIR = REPO_ROOT / "results" / "codec_library"
+FAILED_DIR = REPO_ROOT / "failed"
 
 
 def run_git(args):
@@ -73,14 +76,15 @@ def push_changes(message):
         print(f"Commit failed: {output}", flush=True)
         return False
 
-    # Push
+    # Push; on failure, reconcile with origin (non-fast-forward) and retry once.
     success, output = run_git(["push", "origin", "main"])
     if not success:
-        print(f"Push failed: {output}", flush=True)
-        print("Troubleshooting:", flush=True)
-        print("  1. Check SSH key: ssh -T git@github.com", flush=True)
-        print("  2. Check remote: git remote -v", flush=True)
-        print("  3. Try manual push: git push origin main", flush=True)
+        print(f"Push failed: {output} — reconciling with origin and retrying", flush=True)
+        run_git(["pull", "--rebase", "origin", "main"])
+        success, output = run_git(["push", "origin", "main"])
+    if not success:
+        print(f"Push still failing: {output}", flush=True)
+        print("Result is committed locally; it will be pushed on a later cycle.", flush=True)
         return False
 
     print(f"Pushed: {message}", flush=True)
@@ -150,23 +154,41 @@ def save_result(codec, stage, result_json):
     return result_file
 
 
+def save_failed(job_id, result_json, errors):
+    """Quarantine a result that fails the gate so it never enters the library
+    and can't re-loop through the queue."""
+    FAILED_DIR.mkdir(parents=True, exist_ok=True)
+    failed_file = FAILED_DIR / f"{job_id}.json"
+    payload = dict(result_json)
+    payload["gate_errors"] = errors
+    payload["quarantined_at"] = datetime.now(timezone.utc).isoformat()
+    with open(failed_file, "w") as f:
+        json.dump(payload, f, indent=2)
+    return failed_file
+
+
 def submit_job_result(job_id, codec, stage, result_json):
+    """Gate, then save + dequeue + push. Returns a dict:
+      {"ok": True,  "pushed": bool, "status": str, "file": str}
+      {"ok": False, "rejected": True, "errors": [...]}   # failed the gate
+
+    A result that fails the gate is quarantined to failed/ and removed from the
+    queue (so it can't re-loop) — it NEVER enters the codec library.
     """
-    Complete workflow: save result, remove from queue, commit + push.
-    """
-    # Save result
+    ok, errors = validate_result(result_json)
+    if not ok:
+        print(f"REJECTED {job_id}: {errors}", flush=True)
+        failed_file = save_failed(job_id, result_json, errors)
+        remove_job_from_queue(job_id)
+        push_changes(f"Reject {job_id}: gate failed")
+        return {"ok": False, "rejected": True, "errors": errors, "file": str(failed_file)}
+
     result_file = save_result(codec, stage, result_json)
     print(f"Saved result: {result_file}", flush=True)
-
-    # Remove from queue
     remove_job_from_queue(job_id)
-
-    # Commit + push
     status = result_json.get("status", "unknown")
-    message = f"Complete {job_id}: {status}"
-    success = push_changes(message)
-
-    return success
+    pushed = push_changes(f"Complete {job_id}: {status}")
+    return {"ok": True, "pushed": pushed, "status": status, "file": str(result_file)}
 
 
 def get_codec_progress(codec):
@@ -192,6 +214,31 @@ def get_next_stage(codec):
     if completed < len(stages):
         return stages[completed]
     return None
+
+
+def _read_status(codec, stage):
+    """Return the recorded status for a stage, or None if absent/unreadable."""
+    stage_file = RESULTS_DIR / codec / f"{stage}.json"
+    if not stage_file.exists():
+        return None
+    try:
+        with open(stage_file) as f:
+            return json.load(f).get("status")
+    except Exception:
+        return None
+
+
+def get_codec_pass_progress(codec):
+    """(passed_stages, total) — counts status==pass, NOT mere file existence."""
+    stages = ["m0", "m1", "m2", "m3", "m4"]
+    passed = sum(1 for s in stages if _read_status(codec, s) == "pass")
+    return passed, len(stages)
+
+
+def is_codec_complete(codec):
+    """True only if every stage exists AND every stage is a real pass."""
+    stages = ["m0", "m1", "m2", "m3", "m4"]
+    return all(_read_status(codec, s) == "pass" for s in stages)
 
 
 if __name__ == "__main__":

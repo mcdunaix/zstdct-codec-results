@@ -1,0 +1,29 @@
+# Independent result validation for the zstdct-codec-results repo.
+#
+# INSTALL: copy this file to the results-repo ROOT at .github/workflows/verify-results.yml
+# (GitHub only runs workflows found at <repo>/.github/workflows/). It cannot live
+# under orchestration/. The deploy step handles this copy.
+#
+# Effect: every push / PR that touches results or orchestration re-runs the gate
+# on ALL pushed results, in CI, independent of the device that produced them.
+# A fabricated or evidence-less pass fails the check and blocks the merge.
+name: verify-results
+on:
+  push:
+    paths: ['results/**', 'orchestration/**', '.github/workflows/verify-results.yml']
+  pull_request:
+    paths: ['results/**', 'orchestration/**']
+  workflow_dispatch: {}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Install validator deps
+        run: pip install jsonschema
+      - name: Re-validate every result (independent of the worker)
+        run: python3 orchestration/ci/check_results.py
