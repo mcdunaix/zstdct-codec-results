@@ -1,0 +1,34 @@
+{
+  "job_id": "base64_m0",
+  "codec": "base64",
+  "stage": "m0",
+  "timestamp": "2026-06-20T03:42:58.715451+00:00",
+  "status": "pass",
+  "checks": {
+    "all_byte_exact": true,
+    "corpus_min": true
+  },
+  "metrics": {
+    "files_decoded": 13,
+    "test_cases": 13,
+    "byte_exact": true,
+    "decoder_lines": 41
+  },
+  "tags": [
+    "encoding",
+    "base64",
+    "rfc4648"
+  ],
+  "scope": "full",
+  "notes": "RFC 4648 base64: from-scratch decoder vs stdlib reference encoder \u2014 13/13 byte-exact (incl. the 7 RFC test vectors). Full scope.",
+  "provenance": {
+    "produced_at": "2026-06-20T03:42:58.760005+00:00",
+    "device": "localhost",
+    "code_sha": "c8ff0774b410bbd9fe5f8fad12dddfc664d329c2",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy",
+    "verifier": "verify_base64_m0",
+    "source_hash": "9332e9644a57a90d"
+  },
+  "saved_at": "2026-06-19T21:42:58.760609"
+}
