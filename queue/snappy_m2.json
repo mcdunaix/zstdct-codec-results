@@ -1,8 +1,0 @@
-{
-  "id": "snappy_m2",
-  "codec": "snappy",
-  "stage": "m2",
-  "priority": 3,
-  "spec_url": "",
-  "notes": "Spoon-feed stage m2 for snappy"
-}

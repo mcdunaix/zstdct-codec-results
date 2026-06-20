@@ -1,0 +1,14 @@
+{
+  "job_id": "snappy_m2",
+  "codec": "snappy",
+  "stage": "m2",
+  "status": "pass",
+  "timestamp": "2026-06-19T20:24:47.948341",
+  "metrics": {
+    "decoder_lines": 0,
+    "test_cases": 0,
+    "coverage": 0.0
+  },
+  "notes": "TODO: Implement M2 for snappy",
+  "saved_at": "2026-06-19T20:24:47.948771"
+}
