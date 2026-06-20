@@ -1,0 +1,37 @@
+{
+  "job_id": "gzip_m0",
+  "codec": "gzip",
+  "stage": "m0",
+  "timestamp": "2026-06-20T03:53:08.412080+00:00",
+  "status": "pass",
+  "checks": {
+    "all_byte_exact": true,
+    "corpus_min": true
+  },
+  "metrics": {
+    "files_decoded": 10,
+    "test_cases": 10,
+    "byte_exact": true,
+    "decoder_lines": 507
+  },
+  "tags": [
+    "deflate",
+    "huffman",
+    "lz77",
+    "static_model",
+    "rfc1951",
+    "rfc1952"
+  ],
+  "scope": "full",
+  "notes": "gzip/DEFLATE (RFC 1951/1952): spoon-feed decoder vs stdlib gzip encoder \u2014 10/10 byte-exact across text, binary, repetitive and run cases. Full scope.",
+  "provenance": {
+    "produced_at": "2026-06-20T03:53:08.470024+00:00",
+    "device": "localhost",
+    "code_sha": "3a6bc9388e64ae0c5d47619d19a83e5d615b1fbc",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy",
+    "verifier": "verify_gzip_m0",
+    "source_hash": "1834a69926c063c0"
+  },
+  "saved_at": "2026-06-19T21:53:08.470472"
+}
