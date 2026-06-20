@@ -34,6 +34,8 @@ _VERIFIER_MODULES = (
     "verifiers.snappy_m0", "verifiers.base64_m0",
     "verifiers.gzip_m0", "verifiers.gzip_m1", "verifiers.gzip_m2",
     "verifiers.gzip_m3", "verifiers.gzip_m4",
+    "verifiers.lzma_m0", "verifiers.lzma_m1", "verifiers.lzma_m2",
+    "verifiers.lzma_m3", "verifiers.lzma_m4",
 )
 
 

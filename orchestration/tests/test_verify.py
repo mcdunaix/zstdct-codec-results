@@ -172,6 +172,20 @@ def test_gzip_full_chain():
               f"{r['status']} {errs}")
 
 
+def test_lzma_full_chain():
+    print("9. lzma FULL chain m0-m4 -> all real passes (orbit-only, N=3 cross-family)")
+    for s in ["m0", "m1", "m2", "m3", "m4"]:
+        r = run_stage({"id": f"lzma_{s}", "codec": "lzma", "stage": s})
+        ok, errs = validate_result(r)
+        check(f"lzma/{s} pass + gate", r["status"] == "pass" and ok,
+              f"{r['status']} {errs}")
+    # The distinguishing M3/M4 result: Mode-A preimage is a symmetry ORBIT, not a counting cell.
+    m4 = run_stage({"id": "lzma_m4", "codec": "lzma", "stage": "m4"})
+    check("lzma m4 synthesis_complete", m4["metrics"].get("synthesis_complete") is True)
+    check("lzma m4 orbit-only (cell_count 0)", m4["metrics"].get("cell_count") == 0)
+    check("lzma m4 mode_a_flavor is orbit", m4["metrics"].get("mode_a_flavor") == "orbit")
+
+
 def main():
     print("=" * 64)
     print("Legitimacy backbone tests")
@@ -184,6 +198,7 @@ def main():
     test_base64_is_real_pass()
     test_gzip_is_real_pass()
     test_gzip_full_chain()
+    test_lzma_full_chain()
     print("=" * 64)
     if _failures:
         print(f"FAILED: {len(_failures)} check(s): {_failures}")
