@@ -1,0 +1,14 @@
+{
+  "job_id": "lz4_m0",
+  "codec": "lz4",
+  "stage": "m0",
+  "status": "pass",
+  "timestamp": "2026-06-19T20:22:10.134072",
+  "metrics": {
+    "decoder_lines": 0,
+    "test_cases": 0,
+    "coverage": 0.0
+  },
+  "notes": "TODO: Implement M0 for lz4",
+  "saved_at": "2026-06-19T20:22:10.134587"
+}
