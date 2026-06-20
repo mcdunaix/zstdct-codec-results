@@ -1,0 +1,35 @@
+{
+  "job_id": "png_m1",
+  "codec": "png",
+  "stage": "m1",
+  "timestamp": "2026-06-20T06:42:58.235041+00:00",
+  "status": "pass",
+  "checks": {
+    "kill_switch_pass": true,
+    "all_filters_tested": true
+  },
+  "metrics": {
+    "byte_exact": true,
+    "test_cases": 15,
+    "files_decoded": 15,
+    "filter_variants": 5,
+    "kill_switch_pass": true
+  },
+  "tags": [
+    "image",
+    "png",
+    "filter_killswitch"
+  ],
+  "scope": "full",
+  "notes": "PNG M1 filter kill-switch: decode after all 5 filter types applied \u2014 15/15 byte-exact. Filters exercised: Sub, Up, Average, Paeth (M0 already covers None). Edge cases: first-row prev_row=None, multi-row mixed, extreme values, alternating patterns. Color types: 0/2/6.",
+  "provenance": {
+    "produced_at": "2026-06-20T06:42:58.352228+00:00",
+    "device": "localhost",
+    "code_sha": "78dcc4eadcbdcf1ad7a0a544306f332fe0c0ef1d",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy",
+    "verifier": "verify_png_m1",
+    "source_hash": "6b8a4ac10a554ea8"
+  },
+  "saved_at": "2026-06-20T06:45:00"
+}
