@@ -2,7 +2,7 @@
   "job_id": "lzma_m0",
   "codec": "lzma",
   "stage": "m0",
-  "timestamp": "2026-06-20T05:56:50.649936+00:00",
+  "timestamp": "2026-06-20T06:08:13.579001+00:00",
   "status": "pass",
   "checks": {
     "all_byte_exact": true,
@@ -23,13 +23,13 @@
   "scope": "full",
   "notes": "LZMA FORMAT_ALONE: decoder reproduces 10/10 stdlib-compressed streams byte-exact.",
   "provenance": {
-    "produced_at": "2026-06-20T05:56:50.880332+00:00",
+    "produced_at": "2026-06-20T06:08:13.711978+00:00",
     "device": "localhost",
-    "code_sha": "75442aafc76d40c2f570d6582e0f882e803a9b22",
+    "code_sha": "1730779abb28413d90ad43922fd151e8f111293b",
     "code_dirty": true,
     "orchestration_version": "2.0-legitimacy",
     "verifier": "verify_lzma_m0",
     "source_hash": "8a96633e9a2478fa"
   },
-  "saved_at": "2026-06-19T23:56:50.880711"
+  "saved_at": "2026-06-20T00:08:13.712322"
 }
