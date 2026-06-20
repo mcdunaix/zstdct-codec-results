@@ -1,0 +1,36 @@
+{
+  "job_id": "lzma_m2",
+  "codec": "lzma",
+  "stage": "m2",
+  "timestamp": "2026-06-20T05:56:57.780381+00:00",
+  "status": "pass",
+  "checks": {
+    "reencode_byte_exact": true,
+    "offset0_is_standard": true,
+    "corpus_min": true
+  },
+  "metrics": {
+    "byte_exact": true,
+    "reencode_samples": 8,
+    "reencoded": 8
+  },
+  "tags": [
+    "lzma",
+    "reencode",
+    "direction1",
+    "byte_exact",
+    "range_encoder"
+  ],
+  "scope": "full",
+  "notes": "LZMA M2 (Direction 1): range encoder reproduces the FORMAT_ALONE payload byte-for-byte on 8/8 streams (offset 0 == standard on 8/8).",
+  "provenance": {
+    "produced_at": "2026-06-20T05:56:57.937037+00:00",
+    "device": "localhost",
+    "code_sha": "295faf38b6843c9a7c1aef5a22ea1effa0fc6fb9",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy",
+    "verifier": "verify_lzma_m2",
+    "source_hash": "b426d1eabf800bfe"
+  },
+  "saved_at": "2026-06-19T23:56:57.937402"
+}
