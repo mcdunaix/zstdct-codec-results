@@ -2,13 +2,16 @@
   "job_id": "lz4_m1",
   "codec": "lz4",
   "stage": "m1",
-  "status": "pass",
-  "timestamp": "2026-06-19T20:22:13.385527",
-  "metrics": {
-    "decoder_lines": 0,
-    "test_cases": 0,
-    "coverage": 0.0
+  "timestamp": "2026-06-20T03:17:47.616760+00:00",
+  "status": "not_implemented",
+  "metrics": {},
+  "notes": "No verifier registered for lz4/m1. This stage does no work yet \u2014 reporting the truth, not a pass.",
+  "provenance": {
+    "produced_at": "2026-06-20T03:17:47.648086+00:00",
+    "device": "MacBookPro.lan",
+    "code_sha": "bfeb454899a0fa1b548836434d23d83f985658b0",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy"
   },
-  "notes": "TODO: Implement M1 for lz4",
-  "saved_at": "2026-06-19T20:22:13.385945"
+  "saved_at": "2026-06-19T21:17:47.935825"
 }

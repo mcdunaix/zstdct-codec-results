@@ -2,13 +2,16 @@
   "job_id": "snappy_m3",
   "codec": "snappy",
   "stage": "m3",
-  "status": "pass",
-  "timestamp": "2026-06-19T20:24:51.776360",
-  "metrics": {
-    "decoder_lines": 0,
-    "test_cases": 0,
-    "coverage": 0.0
+  "timestamp": "2026-06-20T03:17:47.859456+00:00",
+  "status": "not_implemented",
+  "metrics": {},
+  "notes": "No verifier registered for snappy/m3. This stage does no work yet \u2014 reporting the truth, not a pass.",
+  "provenance": {
+    "produced_at": "2026-06-20T03:17:47.897590+00:00",
+    "device": "MacBookPro.lan",
+    "code_sha": "bfeb454899a0fa1b548836434d23d83f985658b0",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy"
   },
-  "notes": "TODO: Implement M3 for snappy",
-  "saved_at": "2026-06-19T20:24:51.776776"
+  "saved_at": "2026-06-19T21:17:47.936314"
 }
