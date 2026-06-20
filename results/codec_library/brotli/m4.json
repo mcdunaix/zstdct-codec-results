@@ -1,0 +1,14 @@
+{
+  "job_id": "brotli_m4",
+  "codec": "brotli",
+  "stage": "m4",
+  "status": "pass",
+  "timestamp": "2026-06-19T20:22:06.049445",
+  "metrics": {
+    "decoder_lines": 0,
+    "test_cases": 0,
+    "coverage": 0.0
+  },
+  "notes": "TODO: Implement M4 for brotli",
+  "saved_at": "2026-06-19T20:22:06.049828"
+}
