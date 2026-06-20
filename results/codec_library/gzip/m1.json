@@ -1,0 +1,40 @@
+{
+  "job_id": "gzip_m1",
+  "codec": "gzip",
+  "stage": "m1",
+  "timestamp": "2026-06-20T04:11:22.555095+00:00",
+  "status": "pass",
+  "checks": {
+    "payload_bijection": true,
+    "entropy_code_total": true,
+    "lz_layer_thins": true,
+    "counting_model_present": true,
+    "canonical_gauge_pinned": true,
+    "off_manifold_is_kraft_deficit": true
+  },
+  "metrics": {
+    "kill_switch_pass": true,
+    "entropy_dangled": 0,
+    "gauge_size": 24,
+    "manifold_holes": 1
+  },
+  "tags": [
+    "kill_switch",
+    "counting",
+    "gauge_pinned",
+    "mode_b",
+    "static_model"
+  ],
+  "scope": "full",
+  "notes": "gzip M1 kill-switch: payload bijection + entropy code total (Mode B) + LZ-layer thinning + counting model present + canonical gauge PINNED + off-manifold == Kraft deficit. Preimage mirrors the algorithm.",
+  "provenance": {
+    "produced_at": "2026-06-20T04:11:22.746480+00:00",
+    "device": "localhost",
+    "code_sha": "73788965f25f2c0ae43f4cc0ce6e0e419986b802",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy",
+    "verifier": "verify_gzip_m1",
+    "source_hash": "2cbc89c199a0108a"
+  },
+  "saved_at": "2026-06-19T22:11:22.747540"
+}
