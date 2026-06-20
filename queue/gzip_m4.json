@@ -1,0 +1,6 @@
+{
+  "id": "gzip_m4",
+  "codec": "gzip",
+  "stage": "m4",
+  "spec_url": "https://www.rfc-editor.org/rfc/rfc1951"
+}
