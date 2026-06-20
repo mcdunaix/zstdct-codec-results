@@ -1,0 +1,38 @@
+{
+  "job_id": "lzma_m3",
+  "codec": "lzma",
+  "stage": "m3",
+  "timestamp": "2026-06-20T05:57:01.183564+00:00",
+  "status": "pass",
+  "checks": {
+    "orbit_all_decode_same": true,
+    "orbit_equal_length": true,
+    "orbit_is_fat": true,
+    "orbit_width_zero": true
+  },
+  "metrics": {
+    "mode_a_flavor": "orbit",
+    "orbit_count": 8,
+    "cell_count": 0,
+    "gauge_bits": 25.4
+  },
+  "tags": [
+    "gauge_orbit",
+    "orbit_only",
+    "symmetry",
+    "direction2",
+    "no_counting"
+  ],
+  "scope": "full",
+  "notes": "LZMA M3 (Direction 2): Mode-A preimage is a symmetry ORBIT \u2014 8 equal-length streams all decoding to one output (biggest_cell 8, width 0). Orbit-only; no counting cell (no transmitted model).",
+  "provenance": {
+    "produced_at": "2026-06-20T05:57:01.289687+00:00",
+    "device": "localhost",
+    "code_sha": "be4a3ed58c7831bfa93803ddf6175bdf134894ce",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy",
+    "verifier": "verify_lzma_m3",
+    "source_hash": "d1c73acc933ca719"
+  },
+  "saved_at": "2026-06-19T23:57:01.290504"
+}
