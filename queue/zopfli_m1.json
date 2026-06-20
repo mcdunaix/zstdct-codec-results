@@ -1,0 +1,8 @@
+{
+  "id": "zopfli_m1",
+  "codec": "zopfli",
+  "stage": "m1",
+  "priority": 4,
+  "spec_url": "",
+  "notes": "Spoon-feed stage m1 for zopfli"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "brotli_m1",
+  "codec": "brotli",
+  "stage": "m1",
+  "priority": 1,
+  "spec_url": "",
+  "notes": "Spoon-feed stage m1 for brotli"
+}

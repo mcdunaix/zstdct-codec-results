@@ -1,0 +1,8 @@
+{
+  "id": "lz4_m2",
+  "codec": "lz4",
+  "stage": "m2",
+  "priority": 2,
+  "spec_url": "",
+  "notes": "Spoon-feed stage m2 for lz4"
+}
