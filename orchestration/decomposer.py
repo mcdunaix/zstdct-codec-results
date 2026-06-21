@@ -123,6 +123,12 @@ _HINTS = {
                "(uppercase A-Z then digits 2-7); encode 5 input bytes (40 bits) as 8 chars; the "
                "final partial group is '=' padded (1/2/3/4 input bytes -> 6/4/3/1 trailing '='). "
                "decode reverses this; input is canonical uppercase with padding."),
+    "base16": ("base64.b16encode(x)",
+               "standard Base16 / hex (RFC 4648 §8): each input byte becomes two "
+               "UPPERCASE hex digits, high nibble first ('0'-'9' then 'A'-'F'); the "
+               "stream length is always even and decode maps each pair back to one byte. "
+               "Implement the nibble math by hand — do NOT use bytes.fromhex, binascii, "
+               "or codecs; those are shortcuts that defeat the point."),
     "bz2":  ("bz2.compress(x, 9)",
              "bzip2 (.bz2): run-length-encode, BWT, MTF, RLE2, then Huffman; "
              "stream header 'BZh' + level digit; per-block CRC."),

@@ -1,0 +1,39 @@
+{
+  "job_id": "base16_m0",
+  "codec": "base16",
+  "stage": "m0",
+  "timestamp": "2026-06-21T04:52:14.863493+00:00",
+  "status": "pass",
+  "checks": {
+    "all_byte_exact": true,
+    "corpus_min": true,
+    "independent_decoder": true
+  },
+  "metrics": {
+    "byte_exact": true,
+    "files_decoded": 10,
+    "test_cases": 10,
+    "decoder_lines": 74
+  },
+  "tags": [
+    "generated",
+    "decoder",
+    "byte_exact",
+    "base16",
+    "hex",
+    "encoding",
+    "rfc4648"
+  ],
+  "scope": "full",
+  "notes": "base16 M0: machine-written independent decoder vs real base16 \u2014 10/10 byte-exact (reference codec poisoned at runtime).",
+  "provenance": {
+    "produced_at": "2026-06-21T04:52:14.910780+00:00",
+    "device": "localhost",
+    "code_sha": "561bd5fdf541bf61d455b4c20be363e089c08f7b",
+    "code_dirty": true,
+    "orchestration_version": "2.0-legitimacy",
+    "verifier": "make_m0_verifier.<locals>.verify",
+    "source_hash": "182ec13a4731b409"
+  },
+  "saved_at": "2026-06-20T22:52:14.911546"
+}

@@ -56,6 +56,15 @@ REFERENCE = {
         "decompress": base64.b32decode,
         "tags": ["base32", "encoding", "rfc4648"],
     },
+    "base16": {
+        # RFC 4648 base16 (hex): each byte -> two uppercase hex chars. Trivial to
+        # reimplement but NOT via bytes.fromhex/binascii (forbidden in the prompt),
+        # so it stays a genuine reimplementation. Reliable autonomy proof.
+        "module": "base64",
+        "compress": base64.b16encode,
+        "decompress": base64.b16decode,
+        "tags": ["base16", "hex", "encoding", "rfc4648"],
+    },
     "gzip": {
         "module": "gzip",
         "compress": lambda d: gzip.compress(d, compresslevel=9, mtime=0),
