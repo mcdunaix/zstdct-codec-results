@@ -1,0 +1,17 @@
+{
+  "job_id": "base16_m3",
+  "codec": "base16",
+  "stage": "m3",
+  "timestamp": "2026-06-21T06:08:05.225867+00:00",
+  "status": "not_implemented",
+  "metrics": {},
+  "notes": "No verifier registered for base16/m3. This stage does no work yet \u2014 reporting the truth, not a pass.",
+  "provenance": {
+    "produced_at": "2026-06-21T06:08:05.286267+00:00",
+    "device": "localhost",
+    "code_sha": "07147caf498e4ea44304ce89c55ee5885952808c",
+    "code_dirty": false,
+    "orchestration_version": "2.0-legitimacy"
+  },
+  "saved_at": "2026-06-21T00:08:05.287174"
+}
